@@ -12,7 +12,6 @@
 }
 .container .box {
   width: 100%;
-  margin-bottom: 10px;
   break-inside: avoid;
   border-radius: 15px;
 }
@@ -22,13 +21,13 @@
   border-radius: 10px;
 }
 
-img:hover {
-  opacity: 0.95;
-}
-
 .caption {
   color: #fff;
   padding: 2px;
+}
+
+#popupImage{
+  border-radius: 10px;
 }
 
 @media (max-width: 1427px) {
@@ -43,7 +42,7 @@ img:hover {
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 800px) {
   .container {
     columns: 3;
   }
@@ -53,7 +52,7 @@ img:hover {
   }
 }
 
-@media (max-width: 786px) {
+@media (max-width: 600px) {
   .container {
     columns: 2;
   }

@@ -20,60 +20,103 @@ var arr = [
     { name: "Forest Waterfall Green", image: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=800&q=80" },
 ]
 
-
 function showTheCards() {
     let images = "";
-    arr.forEach(function(obj){
-        images += `<div class="box">
-                      <img class="cursor-pointer" src="${obj.image}" alt="image">
-                      <div class="caption">${obj.name}</div>
-                   </div>`;
-    })
+    arr.forEach(function(obj, index) {
+        images += `
+        <div class="box">
+            <img class="cursor-pointer preview-image" 
+                 src="${obj.image}" 
+                 alt="${obj.name}" 
+                 data-name="${obj.name}" 
+                 data-src="${obj.image}">
+            <div class="caption">${obj.name}</div>
+        </div>`;
+    });
 
     document.querySelector(".container").innerHTML = images;
+
+    // ✅ Add event listeners after rendering images
+    document.querySelectorAll(".preview-image").forEach(img => {
+        img.addEventListener("click", function () {
+            const src = this.getAttribute("data-src");
+            const name = this.getAttribute("data-name");
+            openPopup(src, name);
+        });
+    });
 }
 
+//popup code
+function openPopup(imageUrl, caption) {
+  const popupOverlay = document.getElementById("popupOverlay");
+  const popupImage = document.getElementById("popupImage");
+  const popupCaption = document.getElementById("popupCaption");
+
+  popupImage.src = imageUrl;
+  popupCaption.textContent = caption;
+  popupOverlay.classList.remove("hidden");
+}
+
+document.getElementById("closePopup").addEventListener("click", () => {
+  popupOverlay.classList.add("hidden");
+});
+
+popupOverlay.addEventListener("click", function (e) {
+  // Close if user clicks outside the inner box
+  if (e.target === this) {
+    this.classList.add("hidden");
+  }
+});
+
+// Optional: Close with Escape key
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    popupOverlay.classList.add("hidden");
+  }
+});
+
 function searchFunctionality() {
-    let searchInput = document.querySelector('#searchinput');
-    let overlay = document.querySelector('.overlay');
-    let searchData = document.querySelector('.searchdata');
+  let searchInput = document.querySelector("#searchinput");
+  let overlay = document.querySelector(".overlay");
+  let searchData = document.querySelector(".searchdata");
 
-    searchInput.addEventListener("focus", function () {
-        overlay.style.display = 'block';
-        searchData.style.display = 'block';
-    });
+  searchInput.addEventListener("focus", function () {
+    overlay.style.display = "block";
+    searchData.style.display = "block";
+  });
 
-    // Use timeout so that click on suggestions still works
-    searchInput.addEventListener("blur", function () {
-        setTimeout(() => {
-            overlay.style.display = 'none';
-            searchData.style.display = 'none';
-        }, 200); // Delay allows click event on suggestion to be captured
-    });
+  // Use timeout so that click on suggestions still works
+  searchInput.addEventListener("blur", function () {
+    setTimeout(() => {
+      overlay.style.display = "none";
+      searchData.style.display = "none";
+    }, 200); // Delay allows click event on suggestion to be captured
+  });
 
-    searchInput.addEventListener('input', function () {
-        const query = searchInput.value.toLowerCase();
-        if (query === "") {
-            searchData.style.display = "none";
-            return;
-        }
+  searchInput.addEventListener("input", function () {
+    const query = searchInput.value.toLowerCase();
+    if (query === "") {
+      searchData.style.display = "none";
+      return;
+    }
 
-        const filteredArray = arr.filter(obj => obj.name.toLowerCase().startsWith(query));
-        let clutter = "";
+    const filteredArray = arr.filter((obj) =>
+      obj.name.toLowerCase().startsWith(query)
+    );
+    let clutter = "";
 
-        filteredArray.forEach(function (obj) {
-            clutter += `
+    filteredArray.forEach(function (obj) {
+      clutter += `
                 <div class="res flex px-8 py-3">
                     <i class="ri-search-line font-semibold mr-5"></i>
                     <h3 class="font-semibold">${obj.name}</h3>
                 </div>`;
-        });
-
-        searchData.style.display = "block";
-        searchData.innerHTML = clutter;
     });
-}
 
+    searchData.style.display = "block";
+    searchData.innerHTML = clutter;
+  });
+}
 
 showTheCards();
 searchFunctionality();
