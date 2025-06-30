@@ -36,7 +36,6 @@ function showTheCards() {
 
     document.querySelector(".container").innerHTML = images;
 
-    // ✅ Add event listeners after rendering images
     document.querySelectorAll(".preview-image").forEach(img => {
         img.addEventListener("click", function () {
             const src = this.getAttribute("data-src");
